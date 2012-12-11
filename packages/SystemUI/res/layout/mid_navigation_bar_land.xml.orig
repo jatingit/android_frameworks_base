@@ -49,7 +49,11 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_weight="0"
+<<<<<<< HEAD
+            android:scaleType="centerInside"
+=======
             android:scaleType="fitCenter"
+>>>>>>> 78d1179... SystemUI: add left and right virtual buttons while typing
             systemui:keyRepeat="true"/>
     </FrameLayout>
     <LinearLayout
@@ -116,11 +120,18 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_weight="0"
-            android:scaleType="fitCenter"
+<<<<<<< HEAD
+            android:scaleType="centerInside"
             systemui:keyRepeat="true" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/six"
             android:scaleType="centerInside"
+=======
+            android:scaleType="fitCenter"
+            systemui:keyRepeat="true" />
+        <com.android.systemui.statusbar.policy.KeyButtonView
+            android:id="@+id/six"
+>>>>>>> 78d1179... SystemUI: add left and right virtual buttons while typing
             android:layout_height="40dp"
             android:layout_width="match_parent"
             android:layout_weight="0"

@@ -26,40 +26,35 @@
     android:clipChildren="false"
     android:clipToPadding="false"
     android:id="@+id/nav_buttons">
-
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/dpad_left"
             android:visibility="gone"
-            android:layout_width="48dp"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
+<<<<<<< HEAD
+            android:scaleType="centerInside"
+=======
             android:scaleType="fitCenter"
+>>>>>>> 78d1179... SystemUI: add left and right virtual buttons while typing
             systemui:keyRepeat="true" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/one"
-            android:layout_width="48dp"
+            android:layout_width="@dimen/navigation_extra_key_width"
             android:layout_height="match_parent"
             android:layout_weight="0"
+<<<<<<< HEAD
             android:scaleType="centerInside" />
-        <com.android.systemui.statusbar.policy.KeyButtonView
-            android:id="@+id/ime_switcher"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/navigation_extra_key_width"
-            android:src="@drawable/ic_ime_switcher_default"
-            android:visibility="invisible"
-            android:contentDescription="@string/accessibility_ime_switch_button"
-            android:scaleType="centerInside" />
+=======
+            android:scaleType="fitCenter" />
+>>>>>>> 78d1179... SystemUI: add left and right virtual buttons while typing
     </FrameLayout>
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
     <LinearLayout
         android:layout_height="match_parent"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_weight="1"
         android:clipChildren="false"
         android:clipToPadding="false"
@@ -70,46 +65,78 @@
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/two"
             android:scaleType="centerInside"
-            android:layout_width="162dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+            android:layout_width="@dimen/navigation_key_width"
             android:layout_height="match_parent"
             systemui:keyRepeat="true"
             android:layout_weight="0" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/three"
             android:scaleType="centerInside"
-            android:layout_width="162dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+            android:layout_width="@dimen/navigation_key_width"
             android:layout_height="match_parent"
             systemui:keyRepeat="true"
             android:layout_weight="0" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/four"
             android:scaleType="centerInside"
-            android:layout_width="162dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+            android:layout_width="@dimen/navigation_key_width"
             android:layout_height="match_parent"
             android:layout_weight="0"
             systemui:keyRepeat="true" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/five"
             android:scaleType="centerInside"
-            android:layout_width="162dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+            android:layout_width="@dimen/navigation_key_width"
             android:layout_height="match_parent"
             android:layout_weight="0"
             systemui:keyRepeat="true" />
     </LinearLayout>
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
+        <com.android.systemui.statusbar.policy.KeyButtonView
+                android:background="#FFAA0000"
+                android:id="@+id/ime_switcher"
+                android:layout_width="@dimen/navigation_extra_key_width"
+                android:layout_weight="0"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/accessibility_ime_switch_button"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_ime_switcher_default"
+                android:visibility="invisible" />
+        <com.android.systemui.statusbar.policy.KeyButtonView
+            android:id="@+id/six"
+            android:layout_width="@dimen/navigation_extra_key_width"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+<<<<<<< HEAD
+            android:scaleType="centerInside" />
+=======
+            android:scaleType="fitCenter" />
+>>>>>>> 78d1179... SystemUI: add left and right virtual buttons while typing
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/dpad_right"
             android:visibility="gone"
-            android:layout_width="48dp"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
+<<<<<<< HEAD
+            android:scaleType="centerInside"
+=======
             android:scaleType="fitCenter"
+>>>>>>> 78d1179... SystemUI: add left and right virtual buttons while typing
             systemui:keyRepeat="true"/>
     </FrameLayout>
 </LinearLayout>
