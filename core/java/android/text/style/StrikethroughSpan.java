@@ -46,10 +46,6 @@ public class StrikethroughSpan extends CharacterStyle
         writeToParcelInternal(dest, flags);
     }
 
-    /** @hide */
-    public void writeToParcelInternal(Parcel dest, int flags) {
-    }
-
     @Override
     public void updateDrawState(TextPaint ds) {
         ds.setStrikeThruText(true);

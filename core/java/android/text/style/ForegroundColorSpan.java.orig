@@ -27,7 +27,11 @@ public class ForegroundColorSpan extends CharacterStyle
 
     private final int mColor;
 
+<<<<<<< HEAD
+    public ForegroundColorSpan(@ColorInt int color) {
+=======
     public ForegroundColorSpan(int color) {
+>>>>>>> 8a985d2... Tabs -> spaces in frameworks/base.
         mColor = color;
     }
 
@@ -43,13 +47,13 @@ public class ForegroundColorSpan extends CharacterStyle
     public int getSpanTypeIdInternal() {
         return TextUtils.FOREGROUND_COLOR_SPAN;
     }
-    
+
     public int describeContents() {
         return 0;
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mColor);
+        writeToParcelInternal(dest, flags);
     }
 
     /** @hide */
@@ -57,9 +61,13 @@ public class ForegroundColorSpan extends CharacterStyle
         dest.writeInt(mColor);
     }
 
-	public int getForegroundColor() {
-		return mColor;
-	}
+<<<<<<< HEAD
+    @ColorInt
+=======
+>>>>>>> 8a985d2... Tabs -> spaces in frameworks/base.
+    public int getForegroundColor() {
+        return mColor;
+    }
 
     @Override
     public void updateDrawState(TextPaint ds) {
