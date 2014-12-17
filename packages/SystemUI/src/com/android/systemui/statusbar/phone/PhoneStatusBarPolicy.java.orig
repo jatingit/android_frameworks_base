@@ -56,6 +56,7 @@ import com.android.systemui.statusbar.policy.CastController.CastDevice;
 import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.SuController;
+<<<<<<< HEAD
 
 import cyanogenmod.app.CMStatusBarManager;
 import cyanogenmod.app.CustomTile;
@@ -66,6 +67,8 @@ import org.cyanogenmod.internal.util.QSUtils.OnQSChanged;
 import org.cyanogenmod.internal.util.QSConstants;
 
 import java.util.ArrayList;
+=======
+>>>>>>> 64b309f... su: Add an indicator when a 'su' session is active
 
 /**
  * This class contains all of the policy about which icons are installed in the status
@@ -190,7 +193,7 @@ public class PhoneStatusBarPolicy implements Callback {
         mService.setIconVisibility(SLOT_ALARM_CLOCK, false);
         mAlarmIconObserver.onChange(true);
         mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(Settings.System.SHOW_ALARM_ICON),
+                CMSettings.System.getUriFor(CMSettings.System.SHOW_ALARM_ICON),
                 false, mAlarmIconObserver);
 
         // zen
@@ -229,8 +232,8 @@ public class PhoneStatusBarPolicy implements Callback {
     private ContentObserver mAlarmIconObserver = new ContentObserver(null) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            mAlarmIconVisible = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.SHOW_ALARM_ICON, 1) == 1;
+            mAlarmIconVisible = CMSettings.System.getInt(mContext.getContentResolver(),
+                    CMSettings.System.SHOW_ALARM_ICON, 1) == 1;
             updateAlarm();
         }
 
@@ -295,8 +298,17 @@ public class PhoneStatusBarPolicy implements Callback {
 
         if (DndTile.isVisible(mContext) || DndTile.isCombinedIcon(mContext)) {
             zenVisible = mZen != Global.ZEN_MODE_OFF;
-            zenIconId = mZen == Global.ZEN_MODE_NO_INTERRUPTIONS
-                    ? R.drawable.stat_sys_dnd_total_silence : R.drawable.stat_sys_dnd;
+            switch(mZen) {
+                case Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS:
+                    zenIconId = R.drawable.stat_sys_dnd_priority;
+                    break;
+                case Global.ZEN_MODE_NO_INTERRUPTIONS:
+                    zenIconId = R.drawable.stat_sys_dnd_total_silence;
+                    break;
+                default:
+                    zenIconId = R.drawable.stat_sys_dnd;
+                    break;
+            }
             zenDescription = mContext.getString(R.string.quick_settings_dnd_label);
         } else if (mZen == Global.ZEN_MODE_NO_INTERRUPTIONS) {
             zenVisible = true;
@@ -429,7 +441,6 @@ public class PhoneStatusBarPolicy implements Callback {
             if (DEBUG) Log.v(TAG, "updateCast: hiding icon in 3 sec...");
             mHandler.postDelayed(mRemoveCastIconRunnable, 3000);
         }
-        mService.setIconVisibility(SLOT_CAST, isCasting);
     }
 
     private void profileChanged(int userId) {
@@ -495,12 +506,15 @@ public class PhoneStatusBarPolicy implements Callback {
 
     private void updateSu() {
         mService.setIconVisibility(SLOT_SU, mSuController.hasActiveSessions());
+<<<<<<< HEAD
         final int userId = UserHandle.myUserId();
         if (isSuEnabledForUser(userId)) {
             publishSuCustomTile();
         } else {
             unpublishSuCustomTile();
         }
+=======
+>>>>>>> 64b309f... su: Add an indicator when a 'su' session is active
     }
 
     private final CastController.Callback mCastCallback = new CastController.Callback() {
@@ -532,6 +546,7 @@ public class PhoneStatusBarPolicy implements Callback {
         }
     };
 
+<<<<<<< HEAD
     private void publishSuCustomTile() {
         // This action should be performed as system
         final int userId = UserHandle.myUserId();
@@ -638,4 +653,6 @@ public class PhoneStatusBarPolicy implements Callback {
             unpublishSuCustomTile();
         }
     }
+=======
+>>>>>>> 64b309f... su: Add an indicator when a 'su' session is active
 }

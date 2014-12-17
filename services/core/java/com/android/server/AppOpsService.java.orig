@@ -42,11 +42,13 @@ import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+<<<<<<< HEAD
 import android.content.IntentFilter;
+=======
+>>>>>>> 64b309f... su: Add an indicator when a 'su' session is active
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioAttributes;
 import android.os.AsyncTask;
 import android.os.Binder;
@@ -315,12 +317,12 @@ public class AppOpsService extends IAppOpsService.Stub {
                 Iterator<Ops> it = pkgs.values().iterator();
                 while (it.hasNext()) {
                     Ops ops = it.next();
-                    int curUid;
+                    int curUid = -1;
                     try {
-                        curUid = mContext.getPackageManager().getPackageUid(ops.packageName,
+                        curUid = AppGlobals.getPackageManager().getPackageUidEtc(ops.packageName,
+                                PackageManager.GET_UNINSTALLED_PACKAGES,
                                 UserHandle.getUserId(ops.uidState.uid));
-                    } catch (NameNotFoundException e) {
-                        curUid = -1;
+                    } catch (RemoteException ignored) {
                     }
                     if (curUid != ops.uidState.uid) {
                         Slog.i(TAG, "Pruning old package " + ops.packageName
@@ -603,33 +605,35 @@ public class AppOpsService extends IAppOpsService.Stub {
         String[] uidPackageNames = getPackagesForUid(uid);
         ArrayMap<Callback, ArraySet<String>> callbackSpecs = null;
 
-        ArrayList<Callback> callbacks = mOpModeWatchers.get(code);
-        if (callbacks != null) {
-            final int callbackCount = callbacks.size();
-            for (int i = 0; i < callbackCount; i++) {
-                Callback callback = callbacks.get(i);
-                ArraySet<String> changedPackages = new ArraySet<>();
-                Collections.addAll(changedPackages, uidPackageNames);
-                callbackSpecs = new ArrayMap<>();
-                callbackSpecs.put(callback, changedPackages);
-            }
-        }
-
-        for (String uidPackageName : uidPackageNames) {
-            callbacks = mPackageModeWatchers.get(uidPackageName);
+        synchronized (this) {
+            ArrayList<Callback> callbacks = mOpModeWatchers.get(code);
             if (callbacks != null) {
-                if (callbackSpecs == null) {
-                    callbackSpecs = new ArrayMap<>();
-                }
                 final int callbackCount = callbacks.size();
                 for (int i = 0; i < callbackCount; i++) {
                     Callback callback = callbacks.get(i);
-                    ArraySet<String> changedPackages = callbackSpecs.get(callback);
-                    if (changedPackages == null) {
-                        changedPackages = new ArraySet<>();
-                        callbackSpecs.put(callback, changedPackages);
+                    ArraySet<String> changedPackages = new ArraySet<>();
+                    Collections.addAll(changedPackages, uidPackageNames);
+                    callbackSpecs = new ArrayMap<>();
+                    callbackSpecs.put(callback, changedPackages);
+                }
+            }
+
+            for (String uidPackageName : uidPackageNames) {
+                callbacks = mPackageModeWatchers.get(uidPackageName);
+                if (callbacks != null) {
+                    if (callbackSpecs == null) {
+                        callbackSpecs = new ArrayMap<>();
                     }
-                    changedPackages.add(uidPackageName);
+                    final int callbackCount = callbacks.size();
+                    for (int i = 0; i < callbackCount; i++) {
+                        Callback callback = callbacks.get(i);
+                        ArraySet<String> changedPackages = callbackSpecs.get(callback);
+                        if (changedPackages == null) {
+                            changedPackages = new ArraySet<>();
+                            callbackSpecs.put(callback, changedPackages);
+                        }
+                        changedPackages.add(uidPackageName);
+                    }
                 }
             }
         }
@@ -1099,8 +1103,50 @@ public class AppOpsService extends IAppOpsService.Stub {
                                     + packageName + ")");
                     return switchOp.mode;
                 }
-                op.noteOpCount++;
-                req = askOperationLocked(code, uid, packageName, switchOp);
+
+                if (DEBUG) {
+                        Log.d(TAG, "Package " + op.packageName + " has " + op.noteOpCount
+                                + " requests and " + op.startOpCount + " start requests with "
+                                + op.ignoredCount + " ignored at " + op.time +
+                                " with a duration of "
+                                + op.duration + " while being delayed " + op.delayedCount +
+                                " times");
+                        Log.d(TAG, "Total pkops for " + ops.packageName + " "
+                                + ops.uidState.pkgOps.size());
+                }
+
+                // First drop all request events if the device is not interactive, next
+                // check what the global pkg ops count for the package,
+                // then check op scoped count. High frequency request ops will be delayed until
+                // their delay count ceiling is met. This is to mitigate the overloading the
+                // main activity manager service handler and having watchdog kill our service.
+                // Google play services likes to share its uid with numerous packages to avoid
+                // having to grant permissions from the users perspective and thus is the worst
+                // example of overloading this queue -- so, to not encourage bad behavior,
+                // we move them to the back of the line. NOTE: these values are magic, and may need
+                // tuning. Ideally we'd want a ringbuffer or token bucket here to do proper rate
+                // limiting.
+                final boolean isInteractive = mPowerManager.isInteractive();
+                if (isInteractive &&
+                        (ops.uidState.pkgOps.size() < AppOpsPolicy.RATE_LIMIT_OPS_TOTAL_PKG_COUNT
+                        && op.noteOpCount < AppOpsPolicy.RATE_LIMIT_OP_COUNT
+                        || op.delayedCount > AppOpsPolicy.RATE_LIMIT_OP_DELAY_CEILING)) {
+
+                    // Reset delayed count, most ops will never need this
+                    if (op.delayedCount > 0) {
+                        if (DEBUG) Log.d(TAG, "Resetting delayed count for " + op.packageName);
+                        op.delayedCount = 0;
+                    }
+
+                    op.noteOpCount++;
+                    req = askOperationLocked(code, uid, packageName, switchOp);
+                } else {
+                    if (isInteractive) {
+                        op.delayedCount++;
+                    }
+                    op.ignoredCount++;
+                    return AppOpsManager.MODE_IGNORED;
+                }
             }
         }
 
@@ -1995,10 +2041,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                 Log.e(TAG, "Creating dialog box");
                 op.dialogReqQueue.register(request);
                 if (op.dialogReqQueue.getDialog() == null) {
-                    Dialog d = new PermissionDialog(mContext,
+                    permDialog = new PermissionDialog(mContext,
                             AppOpsService.this, code, uid, packageName);
-                    op.dialogReqQueue.setDialog((PermissionDialog)d);
-                    d.show();
+                    op.dialogReqQueue.setDialog(permDialog);
                 }
             }
             if (permDialog != null) {
@@ -2154,7 +2199,11 @@ public class AppOpsService extends IAppOpsService.Stub {
     private void broadcastOpIfNeeded(int op) {
         switch (op) {
             case AppOpsManager.OP_SU:
+<<<<<<< HEAD
+                mHandler.post(mSuSessionChangedRunner);
+=======
                 mContext.sendBroadcast(new Intent(AppOpsManager.ACTION_SU_SESSION_CHANGED));
+>>>>>>> 64b309f... su: Add an indicator when a 'su' session is active
                 break;
             default:
                 break;
