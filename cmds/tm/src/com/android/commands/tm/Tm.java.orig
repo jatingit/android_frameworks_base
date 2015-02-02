@@ -21,14 +21,18 @@ package com.android.commands.tm;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.ParceledListSlice;
+<<<<<<< HEAD
+=======
 import android.content.pm.ThemeUtils;
 import android.content.res.IThemeService;
+>>>>>>> 0e36525... Themes: Add tm command line tool
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.util.AndroidException;
 import com.android.internal.os.BaseCommand;
 
+<<<<<<< HEAD
 import cyanogenmod.app.CMContextConstants;
 import cyanogenmod.themes.IThemeService;
 import cyanogenmod.themes.ThemeChangeRequest;
@@ -36,7 +40,10 @@ import cyanogenmod.themes.ThemeChangeRequest;
 import org.cyanogenmod.internal.util.ThemeUtils;
 
 import java.io.PrintStream;
+=======
+import java.io.PrintStream;
 import java.util.HashMap;
+>>>>>>> 0e36525... Themes: Add tm command line tool
 import java.util.List;
 import java.util.Map;
 
@@ -60,14 +67,21 @@ public class Tm extends BaseCommand {
         StringBuilder sb = new StringBuilder();
         sb.append("usage: tm [subcommand] [options]\n");
         sb.append("       tm list\n");
+<<<<<<< HEAD
         sb.append("       tm apply <PACKAGE_NAME> [-r] [-c <COMPONENT> [-c <COMPONENT>] ...]\n");
+=======
+        sb.append("       tm apply <PACKAGE_NAME> [-c <COMPONENT> [-c <COMPONENT>] ...]\n");
+>>>>>>> 0e36525... Themes: Add tm command line tool
         sb.append("       tm rebuild\n");
         sb.append("       tm process <PACKAGE_NAME>\n");
         sb.append("\n");
         sb.append("tm list: return a list of theme packages.\n");
         sb.append("\n");
         sb.append("tm apply: applies the components for the theme specified by PACKAGE_NAME.\n");
+<<<<<<< HEAD
         sb.append("       -r: remove per app themes\n");
+=======
+>>>>>>> 0e36525... Themes: Add tm command line tool
         sb.append("       [-c <COMPONENT> [-c <COMPONENT>] ...]\n");
         sb.append("       if no components are specified all components will be applied.\n");
         sb.append("       Valid components are:\n");
@@ -86,8 +100,12 @@ public class Tm extends BaseCommand {
     }
 
     public void onRun() throws Exception {
+<<<<<<< HEAD
         mTs = IThemeService.Stub.asInterface(ServiceManager
                 .getService(CMContextConstants.CM_THEME_SERVICE));
+=======
+        mTs = IThemeService.Stub.asInterface(ServiceManager.getService("themes"));
+>>>>>>> 0e36525... Themes: Add tm command line tool
         if (mTs == null) {
             System.err.println(NO_SYSTEM_ERROR_CODE);
             throw new AndroidException("Can't connect to theme service; is the system running?");
@@ -151,6 +169,7 @@ public class Tm extends BaseCommand {
             }
         }
 
+<<<<<<< HEAD
         boolean removePerAppThemes = false;
 
         ThemeChangeRequest.Builder builder = new ThemeChangeRequest.Builder();
@@ -160,10 +179,18 @@ public class Tm extends BaseCommand {
                 builder.setComponent(nextArgRequired(), pkgName);
             } else if (opt.equals("-r")) {
                 removePerAppThemes = true;
+=======
+        Map<String, String> componentMap = new HashMap<String, String>();
+        String opt;
+        while ((opt=nextOption()) != null) {
+            if (opt.equals("-c")) {
+                componentMap.put(nextArgRequired(), pkgName);
+>>>>>>> 0e36525... Themes: Add tm command line tool
             }
         }
 
         // No components specified so let's just try and apply EVERYTHING!
+<<<<<<< HEAD
         Map<String, String> componentMap = builder.build().getThemeComponentsMap();
         if (componentMap.size() == 0) {
             List<String> components = ThemeUtils.getAllComponents();
@@ -172,6 +199,15 @@ public class Tm extends BaseCommand {
             }
         }
         mTs.requestThemeChange(builder.build(), removePerAppThemes);
+=======
+        if (componentMap.size() == 0) {
+            List<String> components = ThemeUtils.getAllComponents();
+            for (String component : components) {
+                componentMap.put(component, pkgName);
+            }
+        }
+        mTs.requestThemeChange(componentMap);
+>>>>>>> 0e36525... Themes: Add tm command line tool
     }
 
     private void runRebuildResourceCache() throws Exception {
