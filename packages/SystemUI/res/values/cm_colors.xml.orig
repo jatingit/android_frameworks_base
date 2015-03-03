@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2014 The CyanogenMod Project
+     Copyright (C) 2015 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@
 
     <!-- Navigation button ripple color -->
     <color name="navbutton_ripple_color">#FFFFFFFF</color>
+<<<<<<< HEAD
 
     <!-- Expanded Status Bar Weather Text Colors -->
     <color name="status_bar_temperature_text_color">#FFFFFFFF</color>
@@ -125,4 +126,6 @@
 
     <color name="live_lockscreen_gradient_start">#00000000</color>
     <color name="live_lockscreen_gradient_end">#66000000</color>
+=======
+>>>>>>> 05ce0a6... SystemUI: Expose values for themes.
 </resources>
