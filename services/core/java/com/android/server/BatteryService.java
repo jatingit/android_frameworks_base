@@ -387,21 +387,14 @@ public final class BatteryService extends SystemService {
             mPlugType = BatteryManager.BATTERY_PLUGGED_USB;
         } else if (mBatteryProps.chargerWirelessOnline) {
             mPlugType = BatteryManager.BATTERY_PLUGGED_WIRELESS;
-        }
-        mDockPlugType = BATTERY_PLUGGED_NONE;
-        if (mBatteryProps.chargerDockAcOnline && mBatteryProps.chargerAcOnline) {
-            mDockPlugType = BatteryManager.BATTERY_DOCK_PLUGGED_AC;
-        } else if (mBatteryProps.chargerDockAcOnline && mBatteryProps.chargerUsbOnline) {
-            mDockPlugType = BatteryManager.BATTERY_DOCK_PLUGGED_USB;
+        } else {
+            mPlugType = BATTERY_PLUGGED_NONE;
         }
 
         if (DEBUG) {
-            String msg = "Processing new values: "
-                    + "chargerAcOnline=" + mBatteryProps.chargerAcOnline;
-            if (mDockBatterySupported) {
-                msg +=  ", chargerDockAcOnline=" + mBatteryProps.chargerDockAcOnline;
-            }
-            msg +=  ", chargerUsbOnline=" + mBatteryProps.chargerUsbOnline
+            Slog.d(TAG, "Processing new values: "
+                    + "chargerAcOnline=" + mBatteryProps.chargerAcOnline
+                    + ", chargerUsbOnline=" + mBatteryProps.chargerUsbOnline
                     + ", chargerWirelessOnline=" + mBatteryProps.chargerWirelessOnline
                     + ", maxChargingCurrent" + mBatteryProps.maxChargingCurrent
                     + ", batteryStatus=" + mBatteryProps.batteryStatus
@@ -411,22 +404,8 @@ public final class BatteryService extends SystemService {
                     + ", batteryTechnology=" + mBatteryProps.batteryTechnology
                     + ", batteryVoltage=" + mBatteryProps.batteryVoltage
                     + ", batteryTemperature=" + mBatteryProps.batteryTemperature
-                    + ", mBatteryLevelCritical=" + mBatteryLevelCritical;
-            if (mDockBatterySupported) {
-                msg += ", dockBatteryStatus=" + mBatteryProps.dockBatteryStatus
-                        + ", dockBatteryHealth=" + mBatteryProps.dockBatteryHealth
-                        + ", dockBatteryPresent=" + mBatteryProps.dockBatteryPresent
-                        + ", dockBatteryLevel=" + mBatteryProps.dockBatteryLevel
-                        + ", dockBatteryTechnology=" + mBatteryProps.dockBatteryTechnology
-                        + ", dockBatteryVoltage=" + mBatteryProps.dockBatteryVoltage
-                        + ", dockBatteryTemperature=" + mBatteryProps.dockBatteryTemperature;
-            }
-            msg += ", mPlugType=" + mPlugType;
-            if (mDockBatterySupported) {
-                msg +=  ", mDockPlugType=" + mDockPlugType;
-            }
-
-            Slog.d(TAG, msg);
+                    + ", mBatteryLevelCritical=" + mBatteryLevelCritical
+                    + ", mPlugType=" + mPlugType);
         }
 
         // Let the battery stats keep track of the current level.
@@ -451,7 +430,7 @@ public final class BatteryService extends SystemService {
         shutdownIfNoPowerLocked();
         shutdownIfOverTempLocked();
 
-        final boolean batteryChanged = mBatteryProps.batteryStatus != mLastBatteryStatus ||
+        if (force || (mBatteryProps.batteryStatus != mLastBatteryStatus ||
                 mBatteryProps.batteryHealth != mLastBatteryHealth ||
                 mBatteryProps.batteryPresent != mLastBatteryPresent ||
                 mBatteryProps.batteryLevel != mLastBatteryLevel ||
