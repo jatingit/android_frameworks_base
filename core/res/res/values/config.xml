@@ -2497,6 +2497,9 @@
          permanent error -->
     <bool translatable="false" name="config_protocol_errors_perm_failure">true</bool>
 
+    <!-- External CM Services list -->
+    <string-array name="config_externalCMServices"></string-array>
+
     <!-- Timeout in MS for how long you have to long-press the back key to
          kill the foreground app. -->
     <integer name="config_backKillTimeout">2000</integer>
@@ -2565,6 +2568,7 @@
     <!-- The BT name of the keyboard packaged with the device. If this is defined, SystemUI will
          automatically try to pair with it when the device exits tablet mode. -->
     <string translatable="false" name="config_packagedKeyboardName"></string>
+    <integer name="config_dayColorTemperature">6500</integer>
 
     <!-- Show battery fully charged notification -->
     <bool name="config_showBatteryFullyChargedNotification">false</bool>
