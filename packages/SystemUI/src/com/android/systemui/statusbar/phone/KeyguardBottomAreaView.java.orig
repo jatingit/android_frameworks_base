@@ -32,9 +32,7 @@ import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.hardware.fingerprint.FingerprintManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -134,8 +132,11 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private boolean mBottomAreaAttached;
     private final WindowManager.LayoutParams mWindowLayoutParams;
     private OnInterceptTouchEventListener mInterceptTouchListener;
+<<<<<<< HEAD
     private BroadcastReceiver mDevicePolicyReceiver;
     private Intent mLastCameraIntent;
+=======
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
 
     private final ServiceConnection mPrewarmConnection = new ServiceConnection() {
 
@@ -152,12 +153,23 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     @Override
     public void setVisibility(int visibility) {
+<<<<<<< HEAD
         if (visibility == View.VISIBLE) {
             if (!mBottomAreaAttached) {
                 addKeyguardBottomArea(false);
             }
         } else if (mBottomAreaAttached) {
             removeKeyguardBottomArea();
+=======
+        if (visibility != getVisibility()) {
+            if (visibility == View.VISIBLE) {
+                if (!mBottomAreaAttached) {
+                    addKeyguardBottomArea(false);
+                }
+            } else if (mBottomAreaAttached) {
+                removeKeyguardBottomArea();
+            }
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
         }
         super.setVisibility(visibility);
     }
@@ -184,7 +196,11 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private void removeKeyguardBottomArea() {
         if (mBottomAreaAttached) {
             try {
+<<<<<<< HEAD
                 mWindowManager.removeView(this);
+=======
+                mWindowManager.removeViewImmediate(this);
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
             } catch (IllegalArgumentException e) {
                 Log.e(TAG, e.getMessage());
             }
@@ -221,8 +237,11 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mWindowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+<<<<<<< HEAD
         mWindowLayoutParams.privateFlags =
                 WindowManager.LayoutParams.PRIVATE_FLAG_NO_MOVE_ANIMATION;
+=======
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
         mWindowLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         mWindowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         mWindowLayoutParams.format = PixelFormat.TRANSPARENT;
@@ -738,7 +757,10 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             }
             mLastCameraIntent = cameraIntent;
             if (mCameraPreview != null) {
+<<<<<<< HEAD
+=======
                 mPreviewContainer.addView(mCameraPreview);
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
                 mCameraPreview.setVisibility(View.GONE);
             }
         }

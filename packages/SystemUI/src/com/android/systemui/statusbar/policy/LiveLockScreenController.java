@@ -204,6 +204,18 @@ public class LiveLockScreenController {
                 });
             }
         }
+
+        @Override
+        public void slideLockscreenIn() {
+            if (mPanelView.mShowingExternalKeyguard) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mBar.showKeyguard();
+                    }
+                });
+            }
+        }
     };
 
     public boolean isShowingLiveLockScreenView() {

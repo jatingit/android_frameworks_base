@@ -77,8 +77,11 @@ import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
 import com.android.systemui.statusbar.policy.LiveLockScreenController;
+<<<<<<< HEAD
 import com.android.systemui.statusbar.policy.WeatherController;
 import com.android.systemui.statusbar.policy.WeatherControllerImpl;
+=======
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
 
@@ -91,7 +94,7 @@ public class NotificationPanelView extends PanelView implements
         ExpandableView.OnHeightChangedListener, ObservableScrollView.Listener,
         View.OnClickListener, NotificationStackScrollLayout.OnOverscrollTopChangedListener,
         KeyguardAffordanceHelper.Callback, NotificationStackScrollLayout.OnEmptySpaceClickListener,
-        HeadsUpManager.OnHeadsUpChangedListener {
+        HeadsUpManager.OnHeadsUpChangedListener, WeatherController.Callback {
 
     private static final boolean DEBUG = false;
 
@@ -261,11 +264,15 @@ public class NotificationPanelView extends PanelView implements
     private SwipeLockedDirection mLockedDirection;
 
     private SwipeHelper mSwipeHelper;
+<<<<<<< HEAD
+=======
     public boolean mShowingExternalKeyguard;
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
     private final int mMinimumFlingVelocity;
     private final int mScreenHeight;
     private LiveLockScreenController mLiveLockscreenController;
     private final GestureDetector mGestureDetector;
+<<<<<<< HEAD
     private ViewLinker mViewLinker;
     private final UnlockMethodCache mUnlockMethodCache;
     private boolean mDetailScrollLock;
@@ -273,6 +280,8 @@ public class NotificationPanelView extends PanelView implements
     private boolean mKeyguardWeatherEnabled;
     private TextView mKeyguardWeatherInfo;
     private WeatherControllerImpl mWeatherController;
+=======
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
 
     private enum SwipeLockedDirection {
         UNKNOWN,
@@ -284,12 +293,20 @@ public class NotificationPanelView extends PanelView implements
     SwipeHelper.SimpleCallback mSwipeCallback = new SwipeHelper.SimpleCallback() {
         @Override
         public View getChildAtPosition(MotionEvent ev) {
+<<<<<<< HEAD
             return mViewLinker.getParent();
+=======
+            return mNotificationStackScroller;
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
         }
 
         @Override
         public View getChildContentView(View v) {
+<<<<<<< HEAD
+            return mViewLinker.getParent();
+=======
             return mNotificationStackScroller;
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
         }
 
         @Override
@@ -299,10 +316,15 @@ public class NotificationPanelView extends PanelView implements
 
         @Override
         public void onChildDismissed(View v) {
-            mShowingExternalKeyguard = true;
+<<<<<<< HEAD
             mCanDismissKeyguard = false;
             mStatusBar.focusKeyguardExternalView();
             mLiveLockscreenController.onLiveLockScreenFocusChanged(true /* hasFocus */);
+=======
+            mShowingExternalKeyguard = true;
+            mCanDismissKeyguard = false;
+            mStatusBar.focusKeyguardExternalView();
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
             resetAlphaTranslation();
             // Enables the left edge gesture to allow user
             // to return to keyguard
@@ -321,10 +343,17 @@ public class NotificationPanelView extends PanelView implements
             mLiveLockscreenController.getLiveLockScreenView()
                     .onLockscreenSlideOffsetChanged(swipeProgress);
 
+<<<<<<< HEAD
+            // Fade out scrim background
+            float alpha = ScrimController.SCRIM_BEHIND_ALPHA_KEYGUARD - (1f - swipeProgress);
+            alpha = Math.max(0, alpha);
+            mStatusBar.getScrimController().setScrimBehindColor(alpha);
+=======
             // Ensures the status view and notifications are kept in sync when
             // being swiped away
             mKeyguardStatusView.setTranslationX(mNotificationStackScroller.getTranslationX());
             mKeyguardStatusView.setAlpha(mNotificationStackScroller.getAlpha());
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
             return false;
         }
 
@@ -357,7 +386,11 @@ public class NotificationPanelView extends PanelView implements
         final int gradientEnd = res.getColor(R.color.live_lockscreen_gradient_end);
         mGestureDetector = new GestureDetector(getContext(),
                 new GestureDetector.SimpleOnGestureListener() {
+<<<<<<< HEAD
             private float mDown;
+=======
+            public float mDown;
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -366,7 +399,10 @@ public class NotificationPanelView extends PanelView implements
                     return false;
                 }
                 mCanDismissKeyguard = true;
+<<<<<<< HEAD
+=======
                 mShowingExternalKeyguard = false;
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
                 mStatusBar.showBouncer();
                 return true;
             }
@@ -374,7 +410,10 @@ public class NotificationPanelView extends PanelView implements
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 float delta = mDown - e2.getRawY();
+<<<<<<< HEAD
                 delta = Math.max(0, delta);
+=======
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
                 float screenHeightHalf = (float) mScreenHeight / 2f;
                 int color = (Integer) ArgbEvaluator.getInstance()
                         .evaluate(delta / screenHeightHalf, gradientStart, gradientEnd);
@@ -392,7 +431,10 @@ public class NotificationPanelView extends PanelView implements
 
         mSwipeHelper = new SwipeHelper(SwipeHelper.X,
                 SwipeHelper.SWIPE_ZONE_LEFT, mSwipeCallback, mContext);
+<<<<<<< HEAD
         mSwipeHelper.setSwipeProgressFadeEnd(1.0f);
+=======
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
         mMinimumFlingVelocity = ViewConfiguration.get(getContext())
                 .getScaledMinimumFlingVelocity();
 
@@ -402,7 +444,10 @@ public class NotificationPanelView extends PanelView implements
         Point point = new Point();
         display.getSize(point);
         mScreenHeight = point.y;
+<<<<<<< HEAD
         mUnlockMethodCache = UnlockMethodCache.getInstance(context);
+=======
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
     }
 
     public void setStatusBar(PhoneStatusBar bar) {
@@ -413,11 +458,14 @@ public class NotificationPanelView extends PanelView implements
         mLiveLockscreenController = liveController;
     }
 
+<<<<<<< HEAD
     public void setWeatherController(WeatherControllerImpl weatherController) {
         mWeatherController = weatherController;
         mWeatherController.addCallback(this);
     }
 
+=======
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -447,11 +495,14 @@ public class NotificationPanelView extends PanelView implements
         mDozeAnimationInterpolator = AnimationUtils.loadInterpolator(getContext(),
                 android.R.interpolator.linear_out_slow_in);
 
+<<<<<<< HEAD
         mViewLinker = new ViewLinker<NotificationStackScrollLayout>(mNotificationStackScroller,
                 new ViewLinker.LinkInfo(mKeyguardStatusBar, ViewLinker.LINK_ALPHA),
                 new ViewLinker.LinkInfo(mKeyguardStatusView, ViewLinker.LINK_ALPHA
                         | ViewLinker.LINK_TRANSLATION));
 
+=======
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
         mKeyguardBottomArea = (KeyguardBottomAreaView) View.inflate(getContext(),
                 R.layout.keyguard_bottom_area, null);
         /** Keyguard bottom area lives in a separate window, and as such,
@@ -460,6 +511,18 @@ public class NotificationPanelView extends PanelView implements
         mKeyguardBottomArea.setOnInterceptTouchListener(new KeyguardBottomAreaView.OnInterceptTouchEventListener() {
             @Override
             public boolean onInterceptTouchEvent(MotionEvent e) {
+<<<<<<< HEAD
+                boolean intercept = false;
+                if (mLiveLockscreenController.getLiveLockScreenHasFocus()) {
+                    // Handles swipe up to fade/dismiss when showing
+                    // live lock screen
+                    intercept = mAfforanceHelper.onInterceptTouchEvent(e);
+                    if (!intercept) {
+                        intercept = mGestureDetector.onTouchEvent(e);
+                    }
+                } else {
+                    intercept = NotificationPanelView.this.onInterceptTouchEvent(e);
+=======
                 boolean intercept = mAfforanceHelper.onInterceptTouchEvent(e);
                 if (!intercept) {
                     if (mShowingExternalKeyguard) {
@@ -469,8 +532,7 @@ public class NotificationPanelView extends PanelView implements
                     } else {
                         intercept = NotificationPanelView.this.onInterceptTouchEvent(e);
                     }
-                } else {
-                    intercept = NotificationPanelView.this.onInterceptTouchEvent(e);
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
                 }
                 return intercept;
             }
@@ -479,6 +541,29 @@ public class NotificationPanelView extends PanelView implements
             @Override
             public boolean onTouch(View v, MotionEvent e) {
                 int action = e.getAction();
+<<<<<<< HEAD
+
+                boolean isCancelOrUp = action == MotionEvent.ACTION_UP ||
+                        action == MotionEvent.ACTION_CANCEL;
+                if (isCancelOrUp) {
+                    mKeyguardBottomArea.setBackground(null);
+                }
+
+                boolean intercept = false;
+                if (mLiveLockscreenController.getLiveLockScreenHasFocus()) {
+                    intercept = mAfforanceHelper.onTouchEvent(e);
+                    // If the touch did not originate on the affordance helper,
+                    // we must collapse the panel here since we can't rely on
+                    // the swipe callbacks from being invoked.
+                    if (isCancelOrUp && !isAffordanceSwipeInProgress()) {
+                        mKeyguardBottomArea.expand(false);
+                    }
+                    if (!intercept) {
+                        intercept = mGestureDetector.onTouchEvent(e);
+                    }
+                } else {
+                    intercept = NotificationPanelView.this.onTouchEvent(e);
+=======
                 // Ensure we collapse and clear fade
                 if (action == MotionEvent.ACTION_UP ||
                         action == MotionEvent.ACTION_CANCEL) {
@@ -493,8 +578,7 @@ public class NotificationPanelView extends PanelView implements
                     } else {
                         intercept = NotificationPanelView.this.onTouchEvent(e);
                     }
-                } else {
-                    intercept = NotificationPanelView.this.onTouchEvent(e);
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
                 }
                 return intercept;
             }
@@ -841,7 +925,12 @@ public class NotificationPanelView extends PanelView implements
             return true;
         }
 
+<<<<<<< HEAD
+        if (isKeyguardInteractiveAndShowing() || mStatusBar.isKeyguardShowingMedia() ||
+                (mUnlockMethodCache.isTrustManaged() && mAfforanceHelper.isOnLockIcon(event))) {
+=======
         if (isKeyguardInteractiveAndShowing()) {
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
             return super.onInterceptTouchEvent(event);
         }
 
@@ -1005,7 +1094,10 @@ public class NotificationPanelView extends PanelView implements
 
         int action = event.getActionMasked();
         if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+<<<<<<< HEAD
+=======
             mKeyguardBottomArea.expand(false);
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
             mKeyguardBottomArea.setBackground(null);
         }
 
@@ -1022,7 +1114,8 @@ public class NotificationPanelView extends PanelView implements
         }
         if ((!mIsExpanding || mHintAnimationRunning)
                 && !mQsExpanded
-                && mStatusBar.getBarState() != StatusBarState.SHADE) {
+                && (mStatusBar.getBarState() != StatusBarState.SHADE
+                || mLiveLockscreenController.getLiveLockScreenHasFocus())) {
             mAfforanceHelper.onTouchEvent(event);
         }
         if (mOnlyAffordanceInThisMotion) {
@@ -1037,20 +1130,29 @@ public class NotificationPanelView extends PanelView implements
             updateVerticalPanelPosition(event.getX());
         }
 
+<<<<<<< HEAD
+        if (isKeyguardInteractiveAndShowing() || mStatusBar.isKeyguardShowingMedia() ||
+                (mUnlockMethodCache.isTrustManaged() && mAfforanceHelper.isOnLockIcon(event))) {
+=======
         if (isKeyguardInteractiveAndShowing()) {
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
             super.onTouchEvent(event);
             return true;
         }
 
+<<<<<<< HEAD
+=======
         if (!mSwipeHelper.isDragging() && super.onTouchEvent(event)) {
             mLockedDirection = SwipeLockedDirection.VERTICAL;
             return true;
         }
 
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
         if ((!mIsExpanding || mHintAnimationRunning)
                 && !mQsExpanded
                 && mLockedDirection != SwipeLockedDirection.VERTICAL
                 && mStatusBar.getBarState() != StatusBarState.SHADE) {
+<<<<<<< HEAD
             mSwipeHelper.onTouchEvent(event);
             if (mSwipeHelper.isDragging()) {
                 mLockedDirection = SwipeLockedDirection.HORIZONTAL;
@@ -1060,17 +1162,29 @@ public class NotificationPanelView extends PanelView implements
                 return true;
             }
         }
-        return false;
-    }
 
         if (super.onTouchEvent(event)) {
             mLockedDirection = SwipeLockedDirection.VERTICAL;
         }
         return true;
+=======
+            if (mSwipeHelper.onTouchEvent(event)) {
+                mLockedDirection = SwipeLockedDirection.HORIZONTAL;
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isKeyguardInteractiveAndShowing() {
         return mShowingExternalKeyguard || mStatusBar.getBarState() != StatusBarState.KEYGUARD ||
+                !mLiveLockscreenController.isLiveLockScreenInteractive();
+>>>>>>> 9a8df5b... Implement left swipe on lockscreen
+    }
+
+    private boolean isKeyguardInteractiveAndShowing() {
+        return mLiveLockscreenController.getLiveLockScreenHasFocus() ||
+                mStatusBar.getBarState() != StatusBarState.KEYGUARD ||
                 !mLiveLockscreenController.isLiveLockScreenInteractive();
     }
 
@@ -1105,7 +1219,8 @@ public class NotificationPanelView extends PanelView implements
             mTwoFingerQsExpandPossible = true;
         }
         if (mTwoFingerQsExpandPossible && isOpenQsEvent(event)
-                && event.getY(event.getActionIndex()) < mStatusBarMinHeight) {
+                && event.getY(event.getActionIndex()) < mStatusBarMinHeight
+                && mExpandedHeight <= mQsPeekHeight) {
             MetricsLogger.count(mContext, COUNTER_PANEL_OPEN_QS, 1);
             mQsExpandImmediate = true;
             requestPanelHeightUpdate();
@@ -1163,7 +1278,7 @@ public class NotificationPanelView extends PanelView implements
 
     private void handleQsDown(MotionEvent event) {
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN
-                && shouldQuickSettingsIntercept(event.getX(), event.getY(), -1)) {
+                && shouldQuickSettingsIntercept(event.getX(), event.getRawY(), -1)) {
             mQsTracking = true;
             onQsExpansionStarted();
             mInitialHeightOnTouch = mQsExpansionHeight;
@@ -1245,8 +1360,13 @@ public class NotificationPanelView extends PanelView implements
                 mTrackingPointer = -1;
                 trackMovement(event);
                 float fraction = getQsExpansionFraction();
-                if ((fraction != 0f || y >= mInitialTouchY)
-                        && (fraction != 1f || y <= mInitialTouchY)) {
+                final boolean fling = (fraction != 0f || y >= mInitialTouchY)
+                        && (fraction != 1f || y <= mInitialTouchY);
+                final boolean flingExpand = Math.abs(getCurrentVelocity())
+                        > mFlingAnimationUtils.getMinVelocityPxPerSecond();
+                final boolean detailFling = mDetailScrollLock && mQsExpanded
+                        && flingExpand;
+                if ((fling && !mDetailScrollLock) || detailFling) {
                     flingQsWithCurrentVelocity(y,
                             event.getActionMasked() == MotionEvent.ACTION_CANCEL);
                 } else {
@@ -1826,7 +1946,8 @@ public class NotificationPanelView extends PanelView implements
                 && y >= header.getTop() && y <= header.getBottom();
 
         if (mQsExpanded) {
-            return onHeader || (mScrollView.isScrolledToBottom() && yDiff < 0) && isInQsArea(x, y);
+            return onHeader || mDetailScrollLock
+                    || (mScrollView.isScrolledToBottom() && yDiff < 0) && isInQsArea(x, y);
         } else {
             return onHeader;
         }
@@ -1920,7 +2041,7 @@ public class NotificationPanelView extends PanelView implements
      */
     private int getTempQsMaxExpansion() {
         int qsTempMaxExpansion = mQsMaxExpansionHeight;
-        if (mScrollYOverride != -1) {
+        if (mScrollYOverride != -1 && !mDetailScrollLock) {
             qsTempMaxExpansion -= mScrollYOverride;
         }
         return qsTempMaxExpansion;
@@ -2098,7 +2219,6 @@ public class NotificationPanelView extends PanelView implements
                 * mKeyguardStatusBarAnimateAlpha);
         mKeyguardStatusBar.setVisibility(mKeyguardStatusBar.getAlpha() != 0f
                 && !mDozing ? VISIBLE : INVISIBLE);
-        mStatusBar.getVisualizer().setAlpha(mKeyguardStatusBar.getAlpha());
     }
 
     private void updateHeaderKeyguard() {
@@ -2570,11 +2690,6 @@ public class NotificationPanelView extends PanelView implements
 
         // Hide "No notifications" in QS.
         mNotificationStackScroller.updateEmptyShadeView(mShadeEmpty && !mQsExpanded);
-        if (mStatusBarState == StatusBarState.KEYGUARD
-                && (!mQsExpanded || mQsExpandImmediate || mIsExpanding
-                && mQsExpandedWhenExpandingStarted)) {
-            positionClockAndNotifications();
-        }
     }
 
     public void setQsScrimEnabled(boolean qsScrimEnabled) {
@@ -2832,7 +2947,8 @@ public class NotificationPanelView extends PanelView implements
         // If we are launching it when we are occluded already we don't want it to animate,
         // nor setting these flags, since the occluded state doesn't change anymore, hence it's
         // never reset.
-        if (!isFullyCollapsed()) {
+        if (!isFullyCollapsed() && mLastCameraLaunchSource ==
+                KeyguardBottomAreaView.CAMERA_LAUNCH_SOURCE_AFFORDANCE) {
             mLaunchingAffordance = true;
             setLaunchingAffordance(true);
         } else {
