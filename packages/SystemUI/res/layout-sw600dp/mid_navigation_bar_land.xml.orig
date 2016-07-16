@@ -14,7 +14,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
@@ -30,14 +29,22 @@
         android:layout_width="48dp"
         android:layout_height="match_parent"
         android:layout_weight="0"
+<<<<<<< HEAD
+        android:scaleType="centerInside"
+=======
         android:scaleType="fitCenter"
+>>>>>>> 8cec55a... SystemUI : NavigationBar fixes
         systemui:keyRepeat="true" />
     <com.android.systemui.statusbar.policy.KeyButtonView
         android:id="@+id/one"
         android:layout_width="48dp"
         android:layout_height="match_parent"
         android:layout_weight="0"
+<<<<<<< HEAD
+        android:scaleType="centerInside" />
+=======
         android:scaleType="fitCenter" />
+>>>>>>> 8cec55a... SystemUI : NavigationBar fixes
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -90,10 +97,27 @@
         android:layout_height="match_parent"
         android:layout_weight="0"
         android:layout_marginEnd="2dp" >
+<<<<<<< HEAD
+=======
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/ime_switcher"
             android:layout_width="@dimen/navigation_extra_key_width"
             android:layout_height="match_parent"
+            android:layout_marginEnd="2dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_ime_switcher_default"
+            android:visibility="invisible"
+            android:contentDescription="@string/accessibility_ime_switch_button" />
+        <com.android.systemui.statusbar.policy.KeyButtonView
+            android:id="@+id/six"
+            android:layout_width="@dimen/navigation_extra_key_width"
+            android:layout_height="match_parent" />
+>>>>>>> 8cec55a... SystemUI : NavigationBar fixes
+        <com.android.systemui.statusbar.policy.KeyButtonView
+            android:id="@+id/ime_switcher"
+            android:layout_width="@dimen/navigation_extra_key_width"
+            android:layout_height="match_parent"
+<<<<<<< HEAD
             android:layout_marginEnd="2dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_ime_switcher_default"
@@ -110,7 +134,11 @@
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
+            android:scaleType="centerInside"
+=======
+            android:layout_weight="0"
             android:scaleType="fitCenter"
+>>>>>>> 8cec55a... SystemUI : NavigationBar fixes
             systemui:keyRepeat="true"/>
     </FrameLayout>
 </LinearLayout>
